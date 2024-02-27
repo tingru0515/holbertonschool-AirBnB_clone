@@ -31,6 +31,13 @@ class TestBaseModel(unittest.TestCase):
         self.assertNotEqual(old_updated_at, model.updated_at)
         print("Save updates updated_at test passed.")
 
+    def test_str_representation(self):
+        model = BaseModel()
+        model.name = "Test Model"
+        model.my_number = 89
+        expected_str = "[BaseModel] ({}) {}".format(model.id, model.__dict__)
+        self.assertEqual(str(model), expected_str)
+
     def test_to_dict_contains_all_attributes(self):
         # Test if to_dict() method returns dictionary with all required attributes
         model = BaseModel()
