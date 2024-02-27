@@ -28,9 +28,6 @@ class TestSaveReloadBaseModel(unittest.TestCase):
 
     def test_save_reload_base_model(self):
         """Test saving and reloading BaseModel instances."""
-        # Create a new FileStorage instance
-        storage = FileStorage()
-
         # Create a new BaseModel instance
         my_model = BaseModel()
         my_model.name = "My_First_Model"
@@ -38,7 +35,7 @@ class TestSaveReloadBaseModel(unittest.TestCase):
         my_model.save()
 
         # Check if the object is saved in storage
-        all_objs = storage.all()
+        all_objs = FileStorage().all()
         self.assertIn(my_model.id, all_objs)
 
         # Create another BaseModel instance
@@ -48,14 +45,14 @@ class TestSaveReloadBaseModel(unittest.TestCase):
         my_model2.save()
 
         # Check if the object is saved in storage
-        all_objs = storage.all()
+        all_objs = FileStorage().all()
         self.assertIn(my_model2.id, all_objs)
 
         # Reload storage to clear in-memory objects
-        storage.reload()
+        FileStorage().reload()
 
         # Check if objects are reloaded from file
-        all_objs = storage.all()
+        all_objs = FileStorage().all()
         self.assertIn(my_model.id, all_objs)
         self.assertIn(my_model2.id, all_objs)
 
