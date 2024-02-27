@@ -9,16 +9,19 @@ class TestBaseModel(unittest.TestCase):
         model1 = BaseModel()
         model2 = BaseModel()
         self.assertNotEqual(model1.id, model2.id)
+        print("ID generation test passed.")
 
     def test_created_at_type(self):
         # Test if created_at attribute is of type datetime
         model = BaseModel()
         self.assertIsInstance(model.created_at, datetime)
+        print("Created_at type test passed.")
 
     def test_updated_at_type(self):
         # Test if updated_at attribute is of type datetime
         model = BaseModel()
         self.assertIsInstance(model.updated_at, datetime)
+        print("Created_at type test passed.")
 
     def test_save_updates_updated_at(self):
         # Test if save() method updates updated_at attribute
@@ -26,6 +29,7 @@ class TestBaseModel(unittest.TestCase):
         old_updated_at = model.updated_at
         model.save()
         self.assertNotEqual(old_updated_at, model.updated_at)
+        print("Save updates updated_at test passed.")
 
     def test_to_dict_contains_all_attributes(self):
         # Test if to_dict() method returns dictionary with all required attributes
@@ -40,6 +44,7 @@ class TestBaseModel(unittest.TestCase):
         self.assertIn('number', model_dict)
         self.assertIn('__class__', model_dict)
         self.assertEqual(model_dict['__class__'], 'BaseModel')
+        print("to_dict contains all attributes test passed.")
 
 if __name__ == '__main__':
     unittest.main()
