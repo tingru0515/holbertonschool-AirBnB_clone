@@ -10,37 +10,40 @@ class FileStorage:
     __file_path = "file.json"
     __objects = {}
 
+    def __init__(self, *args, **kwargs):
+        """Initialize class FileStorage"""
+
     @property
     def objects(self):
-        return FileStorage.__objects
+        return self.__objects
     
     @objects.setter
     def objects(self, value):
-        FileStorage.__objects = value
+        self.__objects = value
 
     @property
     def filepath(self):
-        return FileStorage.__file_path
+        return self.__file_path
     
     @filepath.setter
     def filepath(self, value):
-        FileStorage.__file_path = value
+        self.__file_path = value
 
     def all(self):
         """Returns the dictionary __objects."""
-        return FileStorage.__objects
+        return self.__objects
 
     def new(self, obj):
         """Sets in __objects the obj with key <obj class name>.id."""
         key = "{}.{}".format(obj.__class__.__name__, obj.id)
-        FileStorage.__objects[key] = obj
+        self.objects[key] = obj
 
     def save(self):
         """Serializes __objects to the JSON file (path: __file_path)."""
         serialized = {}
-        for key, obj in FileStorage.__objects.items():
+        for key, obj in self.__objects.items():
             serialized[key] = obj.to_dict()
-        with open(FileStorage.__file_path, "w") as file:
+        with open(self.__file_path, "w") as file:
             json.dump(serialized, file)
 
     def reload(self):
@@ -51,7 +54,7 @@ class FileStorage:
                 for key, value in serialized.items():
                     class_name, obj_id = key.split('.')
                     self.__objects[key] = eval(class_name)(**value)"""
-            with open(FileStorage.__file_path) as f:
+            with open(self.__file_path) as f:
                 objdict = json.load(f)
                 for o in objdict.values():
                     cls_name = o["__class__"]
