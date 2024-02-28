@@ -1,48 +1,54 @@
 #!/usr/bin/python3
+"""Defines unittests for models/engine/file_storage.py.
+
+Unittest classes:
+    TestFileStorage
+"""
+
+
 import unittest
 import os
 from models.engine.file_storage import FileStorage
 from models.base_model import BaseModel
 
 class TestFileStorage(unittest.TestCase):
-    def setUp(self):
-        # Remove file.json if it exists before each test
-        try:
-            os.remove("file.json")
-        except FileNotFoundError:
-            pass
+    @classmethod
+    def setUpClass(cls):
+        """Set up test environment."""
+        cls.storage = FileStorage()
 
-    def tearDown(self):
-        # Remove file.json after each test
+    @classmethod
+    def tearDownClass(cls):
+        """Tear down test environment."""
         try:
             os.remove("file.json")
         except FileNotFoundError:
             pass
 
     def test_new(self):
-        storage = FileStorage()
+        """Test adding a new object to storage."""
         obj = BaseModel()
-        storage.new(obj)
-        self.assertIn("BaseModel.{}".format(obj.id), storage.all())
+        self.storage.new(obj)
+        self.assertIn("BaseModel.{}".format(obj.id), self.storage.all())
 
     def test_save(self):
-        storage = FileStorage()
+        """Test saving objects to file."""
         obj = BaseModel()
         obj.name = "Test"
-        storage.new(obj)
-        storage.save()
+        self.storage.new(obj)
+        self.storage.save()
         with open("file.json", "r") as f:
             data = f.read()
             self.assertIn("BaseModel.{}".format(obj.id), data)
 
     def test_reload(self):
-        storage = FileStorage()
+        """Test reloading objects from file."""
         obj = BaseModel()
         obj.name = "Test"
-        storage.new(obj)
-        storage.save()
-        storage.reload()
-        all_objs = storage.all()
+        self.storage.new(obj)
+        self.storage.save()
+        self.storage.reload()
+        all_objs = self.storage.all()
         self.assertIn("BaseModel.{}".format(obj.id), all_objs)
 
 if __name__ == '__main__':
