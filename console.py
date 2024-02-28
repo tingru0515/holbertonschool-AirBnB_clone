@@ -131,6 +131,7 @@ class HBNBCommand(cmd.Cmd):
             arg (str): Command argument.
         """
         args = self.split_arg_to_list(arg)
+        found = 0
         HBNBCommand.e_code = self.initial_validator(args, 4)
         if not HBNBCommand.e_code:
             all_objs = HBNBCommand.storage_obj.all()
@@ -138,7 +139,11 @@ class HBNBCommand(cmd.Cmd):
                 filter(lambda value: value.id ==
                        args[1] and value.__class__.__name__ == args[0],
                        all_objs.values()))
-            print(obj_list[0] if len(obj_list) else [])
+            if len(obj_list):
+                print(obj_list[0])
+            else:
+                HBNBCommand.e_code = HBNBCommand.ERROR_CODE["NO_INSTANCE"]
+                self.error_printer()
         else:
             self.error_printer()
 
@@ -149,6 +154,7 @@ class HBNBCommand(cmd.Cmd):
         Args:
             arg (str): Command argument containing instance ID.
         """
+        deleted = 0
         args = self.split_arg_to_list(arg)
         HBNBCommand.e_code = self.initial_validator(args, 4)
         if not HBNBCommand.e_code:
@@ -159,7 +165,11 @@ class HBNBCommand(cmd.Cmd):
                     del all_objs[key]
                     FileStorage.objects == all_objs
                     HBNBCommand.storage_obj.save()
+                    deleted = 1
                     break
+            if deleted:
+                HBNBCommand.e_code = HBNBCommand.ERROR_CODE["NO_INSTANCE"]
+                self.error_printer()
         else:
             self.error_printer()
 
@@ -183,7 +193,11 @@ class HBNBCommand(cmd.Cmd):
                 val for val
                 in HBNBCommand.storage_obj.all().values()
                 if val.__class__.__name__ == args[0])
-            print(create_str_obj_list(obj_list))
+            if len(obj_list):
+                print(create_str_obj_list(obj_list))
+            else:
+                HBNBCommand.e_code = HBNBCommand.ERROR_CODE["NO_INSTANCE"]
+                self.error_printer()
         else:
             self.error_printer()
 
