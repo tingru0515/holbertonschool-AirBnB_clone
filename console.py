@@ -14,7 +14,8 @@ class HBNBCommand(cmd.Cmd):
 
     Attributes:
         prompt (str): Prompt for the command line interface.
-        storage_obj (FileStorage): Instance of FileStorage used for data storage.
+        storage_obj (FileStorage): Instance of
+        FileStorage used for data storage.
         e_code (int): Error code for validation.
         ERROR_CODE (dict): Dictionary mapping error names to error codes.
     """
@@ -57,7 +58,7 @@ class HBNBCommand(cmd.Cmd):
         """
         if not args:
             return HBNBCommand.ERROR_CODE["NO_NAME"]
-        elif find_class(args[0]) == None and layer >= 2:
+        elif find_class(args[0]) is None and layer >= 2:
             return HBNBCommand.ERROR_CODE["NO_CLASS"]
         elif len(args) <= 1 and layer >= 3:
             return HBNBCommand.ERROR_CODE["NO_ID"]
@@ -133,9 +134,11 @@ class HBNBCommand(cmd.Cmd):
         HBNBCommand.e_code = self.initial_validator(args, 4)
         if not HBNBCommand.e_code:
             all_objs = HBNBCommand.storage_obj.all()
-            obj = list(filter(lambda value: value.id ==
-                       args[1], all_objs.values()))
-            print(obj[0])
+            obj_list = list(
+                filter(lambda value: value.id ==
+                       args[1] and value.__class__.__name__ == args[0],
+                       all_objs.values()))
+            print(obj_list[0] if len(obj_list) else [])
         else:
             self.error_printer()
 
@@ -151,7 +154,8 @@ class HBNBCommand(cmd.Cmd):
         if not HBNBCommand.e_code:
             all_objs = HBNBCommand.storage_obj.all()
             for key in all_objs.keys():
-                if all_objs[key].id == args[1]:
+                if (all_objs[key].id == args[1] and
+                        all_objs[key].__class__.__name__ == args[0]):
                     del all_objs[key]
                     FileStorage.objects == all_objs
                     HBNBCommand.storage_obj.save()
@@ -170,7 +174,8 @@ class HBNBCommand(cmd.Cmd):
             return list(str(val) for val in obj_list)
         args = self.split_arg_to_list(arg)
         if not len(args):
-            print(create_str_obj_list(HBNBCommand.storage_obj.objects.values()))
+            print(create_str_obj_list(
+                HBNBCommand.storage_obj.objects.values()))
             return
         HBNBCommand.e_code = self.initial_validator(args, 2)
         if not HBNBCommand.e_code:
@@ -187,7 +192,8 @@ class HBNBCommand(cmd.Cmd):
         Command to update attributes of a specified instance.
 
         Args:
-            arg (str): Command argument containing instance ID, attribute, and value.
+            arg (str): Command argument containing instance ID,
+            attribute, and value.
         """
         args = self.split_arg_to_list(arg)
         not_allowed_args = ["id", "created_at", "updated_at"]
@@ -195,7 +201,8 @@ class HBNBCommand(cmd.Cmd):
         if not HBNBCommand.e_code:
             all_objs = HBNBCommand.storage_obj.all()
             obj = list(filter(lambda value: value.id ==
-                       args[1], all_objs.values()))[0]
+                       args[1] and value.__class__.__name__ == args[0],
+                all_objs.values()))[0]
             if args[2] not in not_allowed_args:
                 # assume args[2] is valid arg
                 key = obj.__class__.__name__ + "." + obj.id
