@@ -21,13 +21,14 @@ class BaseModel:
                         setattr(self, key, datetime.strptime(value, tform))
                     else:
                         setattr(self, key, value)
-            
+
         else:
             models.storage.new(self)
 
     def __str__(self):
         """Return the print/str representation of the BaseModel instance."""
-        return "[{}] ({}) {}".format(self.__class__.__name__, self.id, self.__dict__)
+        return "[{}] ({}) {}".
+        format(self.__class__.__name__, self.id, self.__dict__)
 
     def __repr__(self):
         return self.__str__()
