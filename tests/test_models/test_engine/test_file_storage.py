@@ -47,7 +47,11 @@ class TestFileStorage(unittest.TestCase):
         obj.name = "Test"
         self.storage.new(obj)
         self.storage.save()
+        # Clear the current storage to simulate reloading
+        self.storage._FileStorage__objects = {}
+        # Reload the storage
         self.storage.reload()
+        # Check if the reloaded object is in the storage
         all_objs = self.storage.all()
         self.assertIn("BaseModel.{}".format(obj.id), all_objs)
 
