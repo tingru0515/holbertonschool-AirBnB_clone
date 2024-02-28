@@ -31,7 +31,7 @@ class HBNBCommand(cmd.Cmd):
         "NO_VALUE": 60,
     }
 
-    def split_arg_to_list(self, arg):
+    def split_arg_to_list(self, arg: str) -> list:
         """
         Splits the given string argument into a list.
 
@@ -44,7 +44,7 @@ class HBNBCommand(cmd.Cmd):
 
         return arg.split() if arg else []
 
-    def initial_validator(self, args, layer=1):
+    def initial_validator(self, args: list, layer: int = 1) -> int:
         """
         Validates the arguments based on the specified layer.
 
@@ -69,13 +69,14 @@ class HBNBCommand(cmd.Cmd):
             return HBNBCommand.ERROR_CODE["NO_VALUE"]
         return 0
 
-    def error_printer(self, e_code):
+    def error_printer(self) -> None:
         """
         Prints error messages based on the error code.
 
         Args:
             e_code (int): Error code.
         """
+        e_code = HBNBCommand.e_code
         if e_code == HBNBCommand.ERROR_CODE["NO_NAME"]:
             print("** class name missing **")
         elif e_code == HBNBCommand.ERROR_CODE["NO_CLASS"]:
@@ -88,6 +89,8 @@ class HBNBCommand(cmd.Cmd):
             print("** attribute name missing **")
         elif e_code == HBNBCommand.ERROR_CODE["NO_VALUE"]:
             print("** value missing **")
+
+        HBNBCommand.e_code = 0
 
     def do_create(self, arg: str) -> None:
         """
@@ -104,10 +107,9 @@ class HBNBCommand(cmd.Cmd):
             HBNBCommand.storage_obj.save()
             print(base_obj.id)
         else:
-            print("** class name missing **")
-            HBNBCommand.e_code = 0
+            self.error_printer()
 
-    def find_instance(self, id):
+    def find_instance(self, id: str) -> list:
         """
         Checks if an instance with the given ID exists.
 
@@ -134,8 +136,10 @@ class HBNBCommand(cmd.Cmd):
             obj = list(filter(lambda value: value.id ==
                        args[1], all_objs.values()))
             print(obj[0])
+        else:
+            self.error_printer()
 
-    def do_destroy(self, arg):
+    def do_destroy(self, arg: str) -> None:
         """
         Command to delete a specified instance.
 
@@ -152,8 +156,10 @@ class HBNBCommand(cmd.Cmd):
                     FileStorage.objects == all_objs
                     HBNBCommand.storage_obj.save()
                     break
+        else:
+            self.error_printer()
 
-    def do_all(self, arg):
+    def do_all(self, arg: str) -> None:
         """
         Command to display information about all instances.
 
@@ -173,8 +179,10 @@ class HBNBCommand(cmd.Cmd):
                 in HBNBCommand.storage_obj.all().values()
                 if val.__class__.__name__ == args[0])
             print(create_str_obj_list(obj_list))
+        else:
+            self.error_printer()
 
-    def do_update(self, arg):
+    def do_update(self, arg: str) -> None:
         """
         Command to update attributes of a specified instance.
 
@@ -195,23 +203,10 @@ class HBNBCommand(cmd.Cmd):
                 all_objs[key] = obj
                 FileStorage.objects == all_objs
                 obj.save()
+        else:
+            self.error_printer()
 
-    def postcmd(self, stop, line):
-        """
-        Called after a command is executed. Handles error printing.
-
-        Args:
-            stop (bool): Boolean indicating whether to stop the command loop.
-            line (str): Entered command line.
-
-        Returns:
-            bool: Value indicating whether to stop the command loop.
-        """
-        self.error_printer(HBNBCommand.e_code)
-        HBNBCommand.e_code = 0
-        return stop
-
-    def do_quit(self, arg):
+    def do_quit(self, arg: str) -> bool:
         """
         Command to exit the program.
 
@@ -223,7 +218,7 @@ class HBNBCommand(cmd.Cmd):
         """
         return True
 
-    def do_EOF(self, arg):
+    def do_EOF(self, arg: str) -> bool:
         """
         Command to exit the program on reaching the end of file.
 
@@ -235,7 +230,7 @@ class HBNBCommand(cmd.Cmd):
         """
         return True
 
-    def do_help(self, arg):
+    def do_help(self, arg: str) -> None:
         """
         Customized help command to display documented commands.
 
@@ -253,7 +248,7 @@ class HBNBCommand(cmd.Cmd):
         """
         print("Quit command to exit the program\n")
 
-    def help_EOF(self, arg):
+    def help_EOF(self, arg: str) -> None:
         """EOF command to exit the program"""
         pass
 
