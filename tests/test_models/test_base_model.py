@@ -1,5 +1,6 @@
 #!/usr/bin/python3
 import unittest
+import os
 from models.base_model import BaseModel
 from datetime import datetime
 
@@ -52,6 +53,13 @@ class TestBaseModel(unittest.TestCase):
         self.assertIn('__class__', model_dict)
         self.assertEqual(model_dict['__class__'], 'BaseModel')
         print("to_dict contains all attributes test passed.")
+
+    def test_save_method(self):
+        # Test if save method creates a file
+        model = BaseModel()
+        model.save()
+        self.assertTrue(os.path.exists("file.json"))
+        print("Save method creates a file test passed.")
 
 if __name__ == '__main__':
     unittest.main()
