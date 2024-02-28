@@ -1,16 +1,29 @@
 #!/usr/bin/python3
+"""
+This modules provides TestPlace class inherited from unittest.TestCase.
+"""
 import unittest
 from models.place import Place
 
 
 class TestPlace(unittest.TestCase):
+    """
+    This class provides Place class related tests.
+    """
+
     def test_successfully_create_obj(self):
+        """
+        Testing if obj will be successfully created.
+        """
         obj = Place()
         expected = Place
         actual_value = obj.__class__
         self.assertEqual(actual_value, expected)
 
     def test_class_attribute(self):
+        """
+        Testing if the attrs will be expected.
+        """
         obj = Place()
         expected = obj.name
         actual_value = ''
@@ -47,6 +60,9 @@ class TestPlace(unittest.TestCase):
         self.assertEqual(actual_value, expected)
 
     def test_create_from_dict(self):
+        """
+        Testing if obj will be successfully created from dict.
+        """
         obj_d = {
             'id': '1fcfb4ae-6d4a-4d51-96af-e7182db6ebdb',
             'created_at': "2024-02-28T15:16:01.780000",
