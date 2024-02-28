@@ -4,7 +4,6 @@ This module provides HBNBCommand class inherited from cmd.Cmd class.
 """
 import cmd
 
-from models.base_model import BaseModel
 from models.engine.file_storage import FileStorage
 from models.engine.class_registry import find_class
 
@@ -104,6 +103,9 @@ class HBNBCommand(cmd.Cmd):
             base_obj = found_class()
             HBNBCommand.storage_obj.save()
             print(base_obj.id)
+        else:
+            print("** class name missing **")
+            HBNBCommand.e_code = 0
 
     def find_instance(self, id):
         """
