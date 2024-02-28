@@ -4,6 +4,7 @@ This module provides HBNBCommand class inherited from cmd.Cmd class.
 """
 import cmd
 
+from models.base_model import BaseModel
 from models.engine.file_storage import FileStorage
 from models.engine.class_registry import find_class
 
@@ -57,7 +58,7 @@ class HBNBCommand(cmd.Cmd):
         """
         if not args:
             return HBNBCommand.ERROR_CODE["NO_NAME"]
-        elif find_class(args[0]) == 0 and layer >= 2:
+        elif find_class(args[0]) == None and layer >= 2:
             return HBNBCommand.ERROR_CODE["NO_CLASS"]
         elif len(args) <= 1 and layer >= 3:
             return HBNBCommand.ERROR_CODE["NO_ID"]
@@ -158,10 +159,15 @@ class HBNBCommand(cmd.Cmd):
             arg (str): Command argument.
         """
         args = self.split_arg_to_list(arg)
+        if not len(args):
+            print(list(HBNBCommand.storage_obj.objects.values()))
+            return
         HBNBCommand.e_code = self.initial_validator(args, 2)
         if not HBNBCommand.e_code:
             all_objs = list(
-                val for val in HBNBCommand.storage_obj.all().values())
+                val for val
+                in HBNBCommand.storage_obj.all().values()
+                if val.__class__.__name__ == args[0])
             print(all_objs)
 
     def do_update(self, arg):
