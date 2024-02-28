@@ -167,7 +167,7 @@ class HBNBCommand(cmd.Cmd):
                     HBNBCommand.storage_obj.save()
                     deleted = 1
                     break
-            if deleted:
+            if not deleted:
                 HBNBCommand.e_code = HBNBCommand.ERROR_CODE["NO_INSTANCE"]
                 self.error_printer()
         else:
