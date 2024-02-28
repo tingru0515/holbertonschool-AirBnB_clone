@@ -5,7 +5,9 @@ from models.base_model import BaseModel
 
 
 class FileStorage:
-    """Serializes instances to JSON file and deserializes JSON file to instances."""
+    """Serializes instances to JSON file and
+    deserializes JSON file to instances.
+    """
 
     __file_path = "file.json"
     __objects = {}
@@ -16,7 +18,7 @@ class FileStorage:
     @property
     def objects(self):
         return self.__objects
-    
+
     @objects.setter
     def objects(self, value):
         self.__objects = value
@@ -24,7 +26,7 @@ class FileStorage:
     @property
     def filepath(self):
         return self.__file_path
-    
+
     @filepath.setter
     def filepath(self, value):
         self.__file_path = value
@@ -39,7 +41,8 @@ class FileStorage:
         self.objects[key] = obj
 
     def save(self):
-        """Serializes __objects to the JSON file (path: __file_path)."""
+        """Serializes __objects to the JSON file
+        (path: __file_path)."""
         serialized = {}
         for key, obj in self.__objects.items():
             serialized[key] = obj.to_dict()
@@ -48,17 +51,13 @@ class FileStorage:
 
     def reload(self):
         """Deserializes the JSON file to __objects."""
+        from .class_registry import find_class
         try:
-            """with open(FileStorage.__file_path, "r") as file:
-                serialized = json.load(file)
-                for key, value in serialized.items():
-                    class_name, obj_id = key.split('.')
-                    self.__objects[key] = eval(class_name)(**value)"""
-            with open(self.__file_path) as f:
-                objdict = json.load(f)
-                for o in objdict.values():
-                    cls_name = o["__class__"]
-                    del o["__class__"]
-                    self.new(eval(cls_name)(**o))
-        except FileNotFoundError:
+            with open(self.filepath, 'r') as file:
+                obj_dict = json.load(file)
+                for value in obj_dict.values():
+                    found_class = find_class(value['__class__'])
+                    instance = found_class(**value)
+                    self.new(instance)
+        except (FileNotFoundError):
             pass
