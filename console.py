@@ -158,17 +158,19 @@ class HBNBCommand(cmd.Cmd):
         Args:
             arg (str): Command argument.
         """
+        def create_str_obj_list(obj_list):
+            return list(str(val) for val in obj_list)
         args = self.split_arg_to_list(arg)
         if not len(args):
-            print(list(HBNBCommand.storage_obj.objects.values()))
+            print(create_str_obj_list(HBNBCommand.storage_obj.objects.values()))
             return
         HBNBCommand.e_code = self.initial_validator(args, 2)
         if not HBNBCommand.e_code:
-            all_objs = list(
+            obj_list = list(
                 val for val
                 in HBNBCommand.storage_obj.all().values()
                 if val.__class__.__name__ == args[0])
-            print(all_objs)
+            print(create_str_obj_list(obj_list))
 
     def do_update(self, arg):
         """

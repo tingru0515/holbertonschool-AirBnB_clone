@@ -29,6 +29,9 @@ class BaseModel:
         """Return the print/str representation of the BaseModel instance."""
         return "[{}] ({}) {}".format(self.__class__.__name__, self.id, self.__dict__)
 
+    def __repr__(self):
+        return self.__str__()
+
     def save(self):
         """Update updated_at with the current datetime."""
         self.updated_at = datetime.today()
