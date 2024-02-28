@@ -89,6 +89,8 @@ class HBNBCommand(cmd.Cmd):
         elif e_code == HBNBCommand.ERROR_CODE["NO_VALUE"]:
             print("** value missing **")
 
+        HBNBCommand.e_code = 0
+
     def do_create(self, arg: str) -> None:
         """
         Command to create a new instance of BaseModel.
@@ -104,8 +106,7 @@ class HBNBCommand(cmd.Cmd):
             HBNBCommand.storage_obj.save()
             print(base_obj.id)
         else:
-            print("** class name missing **")
-            HBNBCommand.e_code = 0
+            self.error_printer(HBNBCommand.e_code)
 
     def find_instance(self, id):
         """
