@@ -2,6 +2,8 @@
 import unittest
 import os
 from models.base_model import BaseModel
+from models.engine.file_storage import FileStorage
+import models
 from datetime import datetime
 from time import sleep
 
@@ -99,14 +101,47 @@ class TestBaseModel_save(unittest.TestCase):
     def test_save_with_arg(self):
         bm = BaseModel()
         with self.assertRaises(TypeError):
-            bm.save()
+            bm.save(None)  # Ensure TypeError is raised when calling save with arguments
 
     def test_save_updates_file(self):
         bm = BaseModel()
         bm.save()
+
+        # Check if the object is saved in storage (file.json)
         bmid = "BaseModel." + bm.id
         with open("file.json", "r") as f:
             self.assertIn(bmid, f.read())
+
+    def test_save_reload_base_model(self):
+        """Test saving and reloading BaseModel instances."""
+        # Create a new BaseModel instance
+        my_model = BaseModel()
+        my_model.name = "My_First_Model"
+        my_model.my_number = 89
+        my_model.save()
+
+        # Check if the object is saved in storage
+        all_objs = FileStorage().all()
+        self.assertIn(my_model.id, all_objs)
+
+        # Create another BaseModel instance
+        my_model2 = BaseModel()
+        my_model2.name = "My_Second_Model"
+        my_model2.my_number = 42
+        my_model2.save()
+
+        # Check if the object is saved in storage
+        all_objs = FileStorage().all()
+        self.assertIn(my_model2.id, all_objs)
+
+        # Reload storage to clear in-memory objects
+        FileStorage().reload()
+
+        # Check if objects are reloaded from file
+        all_objs = FileStorage().all()
+        self.assertIn(my_model.id, all_objs)
+        self.assertIn(my_model2.id, all_objs)
+
 
 if __name__ == '__main__':
     unittest.main()

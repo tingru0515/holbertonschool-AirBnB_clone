@@ -33,8 +33,10 @@ class BaseModel:
     def __repr__(self):
         return self.__str__()
 
-    def save(self):
-        """Update updated_at with the current datetime."""
+    def save(self, *args, **kwargs):
+        """Update updated_at with the current datetime and save the instance."""
+        if args or kwargs:
+            raise TypeError("save() takes 0 positional arguments but {} were given".format(len(args) + len(kwargs)))
         self.updated_at = datetime.today()
         models.storage.save()
 
