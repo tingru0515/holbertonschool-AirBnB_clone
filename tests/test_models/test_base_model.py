@@ -7,6 +7,7 @@ import models
 from datetime import datetime
 from time import sleep
 
+
 class TestBaseModel(unittest.TestCase):
     def test_id_generation(self):
         # Test if each instance has a unique id
@@ -43,7 +44,6 @@ class TestBaseModel(unittest.TestCase):
         self.assertEqual(str(model), expected_str)
 
     def test_to_dict_contains_all_attributes(self):
-        # Test if to_dict() method returns dictionary with all required attributes
         model = BaseModel()
         model.name = "Test"
         model.number = 123
@@ -56,6 +56,7 @@ class TestBaseModel(unittest.TestCase):
         self.assertIn('__class__', model_dict)
         self.assertEqual(model_dict['__class__'], 'BaseModel')
         print("to_dict contains all attributes test passed.")
+
 
 class TestBaseModel_save(unittest.TestCase):
     """Unittests for testing save method of the BaseModel class."""
@@ -101,7 +102,8 @@ class TestBaseModel_save(unittest.TestCase):
     def test_save_with_arg(self):
         bm = BaseModel()
         with self.assertRaises(TypeError):
-            bm.save(None)  # Ensure TypeError is raised when calling save with arguments
+            # Ensure TypeError is raised when calling save with arguments
+            bm.save(None)
 
     def test_save_updates_file(self):
         bm = BaseModel()

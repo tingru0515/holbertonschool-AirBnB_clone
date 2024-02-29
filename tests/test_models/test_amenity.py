@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 """
-This modules provides TestAmenity class inherited from unittest.TestCase.
+This modules provides TestAmenity class inherited
+from unittest.TestCase.
 """
 import unittest
 from models.amenity import Amenity

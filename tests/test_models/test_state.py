@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 """
-This modules provides TestState class inherited from unittest.TestCase.
+This modules provides TestState class inherited
+from unittest.TestCase.
 """
 import unittest
 from models.state import State

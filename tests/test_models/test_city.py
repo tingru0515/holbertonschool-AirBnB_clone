@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 """
-This modules provides TestCity class inherited from unittest.TestCase.
+This modules provides TestCity class inherited
+from unittest.TestCase.
 """
 import unittest
 from models.city import City
