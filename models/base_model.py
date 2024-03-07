@@ -26,17 +26,17 @@ class BaseModel:
             models.storage.new(self)
 
     def __str__(self):
-        """Return the print/str representation of the BaseModel instance."""
+        """Return the print/str representation of
+        the BaseModel instance.
+        """
         return "[{}] ({}) {}".format(self.__class__.__name__,
                                      self.id, self.__dict__)
 
     def __repr__(self):
         return self.__str__()
 
-    def save(self, *args, **kwargs):
-        """Update updated_at with the current datetime and save the instance."""
-        if args or kwargs:
-            raise TypeError("save() takes 0 positional arguments but {} were given".format(len(args) + len(kwargs)))
+    def save(self):
+        """Update updated_at with the current datetime."""
         self.updated_at = datetime.today()
         models.storage.save()
 

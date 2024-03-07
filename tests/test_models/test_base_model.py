@@ -7,6 +7,7 @@ import models
 from datetime import datetime
 from time import sleep
 
+
 class TestBaseModel(unittest.TestCase):
     def test_id_generation(self):
         # Test if each instance has a unique id
@@ -43,7 +44,6 @@ class TestBaseModel(unittest.TestCase):
         self.assertEqual(str(model), expected_str)
 
     def test_to_dict_contains_all_attributes(self):
-        # Test if to_dict() method returns dictionary with all required attributes
         model = BaseModel()
         model.name = "Test"
         model.number = 123
@@ -56,6 +56,7 @@ class TestBaseModel(unittest.TestCase):
         self.assertIn('__class__', model_dict)
         self.assertEqual(model_dict['__class__'], 'BaseModel')
         print("to_dict contains all attributes test passed.")
+
 
 class TestBaseModel_save(unittest.TestCase):
     """Unittests for testing save method of the BaseModel class."""
@@ -101,7 +102,8 @@ class TestBaseModel_save(unittest.TestCase):
     def test_save_with_arg(self):
         bm = BaseModel()
         with self.assertRaises(TypeError):
-            bm.save(None)  # Ensure TypeError is raised when calling save with arguments
+            # Ensure TypeError is raised when calling save with arguments
+            bm.save(None)
 
     def test_save_updates_file(self):
         bm = BaseModel()
@@ -122,7 +124,8 @@ class TestBaseModel_save(unittest.TestCase):
 
         # Check if the object is saved in storage
         all_objs = FileStorage().all()
-        self.assertIn(my_model.id, all_objs)
+        found_id1 = any(val.id == my_model.id for val in all_objs.values())
+        self.assertTrue(found_id1)
 
         # Create another BaseModel instance
         my_model2 = BaseModel()
@@ -132,15 +135,18 @@ class TestBaseModel_save(unittest.TestCase):
 
         # Check if the object is saved in storage
         all_objs = FileStorage().all()
-        self.assertIn(my_model2.id, all_objs)
+        found_id2 = any(val.id == my_model.id for val in all_objs.values())
+        self.assertTrue(found_id2)
 
         # Reload storage to clear in-memory objects
         FileStorage().reload()
 
         # Check if objects are reloaded from file
         all_objs = FileStorage().all()
-        self.assertIn(my_model.id, all_objs)
-        self.assertIn(my_model2.id, all_objs)
+        found_id1 = any(val.id == my_model.id for val in all_objs.values())
+        found_id2 = any(val.id == my_model2.id for val in all_objs.values())
+        self.assertTrue(found_id1)
+        self.assertTrue(found_id2)
 
 
 if __name__ == '__main__':

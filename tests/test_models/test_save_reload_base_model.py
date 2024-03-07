@@ -36,7 +36,8 @@ class TestSaveReloadBaseModel(unittest.TestCase):
 
         # Check if the object is saved in storage
         all_objs = FileStorage().all()
-        self.assertIn(my_model.id, all_objs)
+        found_id = any(val.id == my_model.id for val in all_objs.values())
+        self.assertTrue(found_id)
 
         # Create another BaseModel instance
         my_model2 = BaseModel()
@@ -46,15 +47,18 @@ class TestSaveReloadBaseModel(unittest.TestCase):
 
         # Check if the object is saved in storage
         all_objs = FileStorage().all()
-        self.assertIn(my_model2.id, all_objs)
+        found_id = any(val.id == my_model2.id for val in all_objs.values())
+        self.assertTrue(found_id)
 
         # Reload storage to clear in-memory objects
         FileStorage().reload()
 
         # Check if objects are reloaded from file
         all_objs = FileStorage().all()
-        self.assertIn(my_model.id, all_objs)
-        self.assertIn(my_model2.id, all_objs)
+        found_id = any(val.id == my_model.id for val in all_objs.values())
+        found_id2 = any(val.id == my_model2.id for val in all_objs.values())
+        self.assertTrue(found_id)
+        self.assertTrue(found_id2)
 
 
 if __name__ == '__main__':
