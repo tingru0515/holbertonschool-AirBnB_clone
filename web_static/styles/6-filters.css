@@ -63,6 +63,7 @@
     list-style: none;
     padding-top: 20px;
     padding-bottom: 20px;
+    top: 56px;
 }
 .popover .secondary-list {
     list-style: none;
@@ -78,7 +79,7 @@
 .amenities .popover li {
     margin: 10px 0;
 }
-.locations .popover,
-.amenities .popover {
+.locations:hover .popover,
+.amenities:hover .popover {
     display: block;
 }
